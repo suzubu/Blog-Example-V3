@@ -93,7 +93,7 @@ def login():
     if form.validate_on_submit():
         email=form.email.data
         password=form.password.data
-        result = db.session.execute(db.select(User).where(User.email) == email)
+        result = db.session.execute(db.select(User).where(User.email == email))
         user = result.scalar()
 
         if user and check_password_hash(user.password, password):
