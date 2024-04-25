@@ -10,7 +10,8 @@ from sqlalchemy import Integer, String, Text
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 # Import your forms from the forms.py
-from forms import CreatePostForm, RegisterForm
+from forms import CreatePostForm, RegisterForm, LoginForm
+
 
 
 app = Flask(__name__)
@@ -19,6 +20,13 @@ ckeditor = CKEditor(app)
 Bootstrap5(app)
 
 # TODO: Configure Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader()
+def load_user(user_id):
+    return db.get_or_404(User, user_id)
+
 
 
 # CREATE DATABASE
@@ -43,7 +51,7 @@ class BlogPost(db.Model):
 
 # TODO: Create a User table for all your registered users. 
 class User(UserMixin,db.Model):
-    __tablename__ = "users"
+    __tablename__ = "usersdb "
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(1000))
     email: Mapped[str] = mapped_column(String(100), unique=True)
@@ -79,8 +87,9 @@ def register():
 
 
 # TODO: Retrieve a user from the database based on their email. 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
+
     return render_template("login.html")
 
 
