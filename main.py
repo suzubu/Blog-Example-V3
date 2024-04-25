@@ -23,7 +23,7 @@ Bootstrap5(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-@login_manager.user_loader()
+@login_manager.user_loader
 def load_user(user_id):
     return db.get_or_404(User, user_id)
 
